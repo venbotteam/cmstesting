@@ -18,13 +18,6 @@ const routes = [
     }
 ]
 
-const routes2 = [
-    {
-        path:"/dashboard",
-        name:"dashboard",
-        component:() => import("../Dashboard/DBcontent/Dashboard.vue"),
-    }
-]
 
 export default createRouter({
     history: createWebHashHistory(),

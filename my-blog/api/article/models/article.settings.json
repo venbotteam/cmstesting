@@ -25,9 +25,9 @@
       "required": true
     },
     "users_permissions_user": {
+      "via": "articles",
       "plugin": "users-permissions",
-      "model": "user",
-      "via": "articles"
+      "model": "user"
     },
     "categories": {
       "collection": "category",
@@ -45,6 +45,9 @@
       "plugin": "upload",
       "required": false,
       "pluginOptions": {}
+    },
+    "tags": {
+      "type": "json"
     }
   }
 }
