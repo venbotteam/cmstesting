@@ -9,13 +9,13 @@ const routes = [
     {
         path: "/search/:keyword",
         name: "Search",
-        component: () => import("../pages/Search/Search.vue"),
+        component: () => import("../../../cmstesting/src/pages/Search/Search.vue"),
     },
 
     {
         path: "/categories/:category",
         name: "Category",
-        component: () => import("../pages/Category/Category.vue"),
+        component: () => import("../../../cmstesting/src/pages/Category/Category.vue"),
     },
 
     {

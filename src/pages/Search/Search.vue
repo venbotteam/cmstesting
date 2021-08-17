@@ -21,7 +21,7 @@
 import {useRoute, useRouter} from "vue-router";
 import {onMounted, reactive, watch} from "vue";
 import * as dayjs from "dayjs";
-import {Articles} from "../../models/articles";
+import {Articles} from "../../../../vue-blog/src/models/articles";
 import ArticlePreview from '@/components/ArticlePreview/ArticlePreview.vue'
 // import { ref } from "vue";
 

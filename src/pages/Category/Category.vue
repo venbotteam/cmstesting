@@ -12,7 +12,7 @@ import ArticlePreview from '@/components/ArticlePreview/ArticlePreview.vue'
 import {onMounted, reactive, watch} from "vue";
 // import {Category} from "../../models/Categories/Category";
 import {useRoute, useRouter} from "vue-router";
-import {Category} from "../../models/Categories/Category";
+import {Category} from "../../../../vue-blog/src/models/Categories/Category";
 // import {Articles} from "../../models/articles";
 
 export default {
