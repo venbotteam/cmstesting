@@ -1,6 +1,7 @@
 <template>
+<!--  using markdown-->
   <div class="card">
-    <div class="cover-photo p1" :style="{backgroundImage:`url(http://localhost:1337${article.coverImg[0].url})`}">
+    <div class="cover-photo p1" :style="{backgroundImage:`url(/api${article.coverImg[0].url})`}">
     </div>
     <div class="content-container">
       <div class="content-info">
@@ -14,15 +15,41 @@
       <div class="content-btn" @click="openArticle">Read More</div>
     </div>
 
+    <div class="page-turner"></div>
+<!--    page turn , every page shows only 3, undone yet-->
+
   </div>
+
+<!--  <div class="card">-->
+<!--    <template v-for="(art,ind) in artObj.articles" :key="ind" >-->
+<!--    <div class="cover-photo" :style="{backgroundImage:`url(/api${art?.coverImg[0]?.url})`}">-->
+<!--    </div>-->
+<!--    <div class="content-container">-->
+<!--      <div class="content-info">-->
+<!--        <div class="content-author">By {{ art.users_permissions_user.username }}</div>-->
+<!--        <div class="content-date">{{ haha.d(art.date).format('DD/MM/YYYY') }}</div>-->
+<!--      </div>-->
+<!--      <div class="content-title">{{ art.title }}</div>-->
+<!--      <div class="content">-->
+<!--&lt;!&ndash;        <Markdown langPrefix="md" :source="art.content"/>&ndash;&gt;-->
+<!--        {{art.content}}-->
+<!--      </div>-->
+<!--      <div class="content-btn" @click="openArticle">Read More</div>-->
+<!--    </div>-->
+
+    <!--    page turn , every page shows only 3, undone yet-->
+<!--    </template>-->
+    <div class="page-turner"></div>
+<!--  </div>-->
+
 </template>
 
 <script>
 import Markdown from 'vue3-markdown-it';
 import * as dayjs from 'dayjs'
-
 import {useRouter} from "vue-router";
-import {reactive} from "vue";
+import {onMounted, reactive} from "vue";
+import {Articles} from "../../models/articles";
 
 export default {
   name: "ArticlePreview",
@@ -60,13 +87,23 @@ export default {
     }
 
   },
+
   setup(props) {
     let router = useRouter()
     const haha = reactive({d:dayjs})
-    const openArticle = () => {
-      router.push({path: `/${props.article.id}`})
+    const artObj = reactive({articles:[]})
+    const openArticle = async () => {
+      // let art = await Articles.getArticleList()
+      await router.push({path: `/${props.article.id}`})
     }
+
+    onMounted(async ()=>{
+      // let art = await Articles.getArticleList()
+      // artObj.articles=art
+      // console.log(art)
+    })
     return {
+      artObj,
       openArticle,
       haha
     }
@@ -80,7 +117,7 @@ export default {
   height: 720px;
   font-family: Nunito, sans-serif;
   display: flow;
-  margin-top: 48px;
+  margin-top: 90px;
   padding-left: 15px;
   padding-right: 15px;
   margin-bottom: 30px;
@@ -90,26 +127,27 @@ export default {
 }
 
 .cover-photo {
-  margin-top: 15px;
   border-radius: 10px;
   width: 726px;
   height: 346px;
+  background-size: cover;
 }
+
 
 .p1 {
-  background-image: url(../../assets/img.png);
-  background-size: cover;
+  /*background-image: url(../../assets/img.png);*/
+
 }
 
-.p2 {
-  background-image: url(../../assets/img_1.png);
-  background-size: cover;
-}
+/*.p2 {*/
+/*  background-image: url(../../assets/img_1.png);*/
+/*  background-size: cover;*/
+/*}*/
 
-.p3 {
-  background-image: url(../../assets/img_2.png);
-  background-size: cover;
-}
+/*.p3 {*/
+/*  background-image: url(../../assets/img_2.png);*/
+/*  background-size: cover;*/
+/*}*/
 
 .content-info {
   margin-top: 30px;

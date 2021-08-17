@@ -1,18 +1,18 @@
 <template>
 <div class="header">
-  <div class="upper-header">
-    <div class="boundary">
-      <div class="company-contact-info">
-        <div class="address">California, TX 70240</div>
-        <div class="email">info@gmail.com</div>
-        <div class="tel">+123 456 7890</div>
-      </div>
-      <div class="free-analysis-btn">
-        Free Analysis
-      </div>
-    </div>
+<!--  <div class="upper-header">-->
+<!--    <div class="boundary">-->
+<!--      <div class="company-contact-info">-->
+<!--        <div class="address">California, TX 70240</div>-->
+<!--        <div class="email">info@gmail.com</div>-->
+<!--        <div class="tel">+123 456 7890</div>-->
+<!--      </div>-->
+<!--      <div class="free-analysis-btn">-->
+<!--        Free Analysis-->
+<!--      </div>-->
+<!--    </div>-->
 
-  </div>
+<!--  </div>-->
   <div class="lower-header">
     <div class="boundary">
       <div class="icon"></div>

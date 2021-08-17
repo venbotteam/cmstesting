@@ -1,36 +1,46 @@
 <template>
+
   <div class="search">
-    <input type="text" id="search" placeholder="">
+    <div class="search-field">
+      <input type="text" id="search" v-model="searchObj.keyword" placeholder="" @keyup.enter="searchArticle"/>
+      <SearchIcon @click="searchArticle" class="searchIcon"/>
+    </div>
     <span class="line"></span>
   </div>
 
   <div class="right-heading">Recent Posts</div>
+
   <template v-for="(rpp,ind) in recentpostObj.recentposts" :key="ind">
-    <div class="recent-post-container">
-      <div class="rp-img" :style="`background-image: url(${rpp.coverImg})`"></div>
+    <div class="recent-post-container " @click="openArticle(rpp.id)">
+      <div class="rp-img" :style="`background-image:url(/api${rpp.coverImg[0].url})`"></div>
       <div class="rp-info-container">
+<!--        click title and then route-->
         <div class="right-subheading">{{ rpp.title }}</div>
-        <div class="rp-date">{{ rpp.date }}</div>
+        <div class="rp-date">{{ haha.d(rpp.date).format('DD/MM/YYYY') }}</div>
+        <div class="test">{{rpp.id}}</div>
       </div>
     </div>
     <div class="right-separator"></div>
   </template>
 
-  <div class="right-heading">Category </div>
-  <template v-for="(cl,ind) in categorylistObj.clist" :key="ind">
+
+  <div class="right-heading">Category List</div>
+  <template v-for="(categories,ind) in categorylistObj.categories" :key="ind">
     <div class="category-list-container">
-      <div class="category-name">{{ cl.category }}</div>
-      <div class="number">{{ cl.number }}</div>
+      <div class="category-name" @click="openCategory(categories.id)">
+        {{categories.category}}
+      </div>
+      <div class="number">{{categories.articles.length}}</div>
     </div>
     <div class="right-separator"></div>
-  </template>
+      </template>
 
-  <div class="right-heading">gallery</div>
-  <div class="gallery-container">
-<template v-for="(gl,ind) in galleryObj.gallery" :key="ind">
-  <div class="gallery" :style="`background-image: url(${gl.coverImg})`"></div>
-</template>
-  </div>
+<!--  <div class="right-heading">gallery</div>-->
+<!--  <div class="gallery-container">-->
+<!--<template v-for="(gl,ind) in galleryObj.gallery.Gallery" :key="ind">-->
+<!--  <div class="gallery" v-if="ind<6" :style="`background-image: url(/api${gl.url})`"></div>-->
+<!--</template>-->
+<!--  </div>-->
 
   <div class="right-heading">Follow US</div>
   <div class="followus">
@@ -41,153 +51,157 @@
   <div class="share-btn youtube-btn"></div>
   </div>
 
-  <div class="right-heading"></div>
 
-  <div class="right-heading"></div>
-
-  <div class="right-subheading">Consulted admitting is power acuteness.</div>
-  <div class="right-separator"></div>
-  <div class="right-subheading">Unsatiable entreaties may collecting Power.</div>
-  <div class="right-separator"></div>
-  <div class="right-subheading">Discovery incommode earnestly command</div>
-  <div class="right-separator"></div>
-  <div class="right-subheading">Participate in staff meetingness manage</div>
-  <div class="right-separator"></div>
-  <div class="right-subheading">Future plan & strategy for construction</div>
-  <div class="right-separator"></div>
-  <div class="right-heading">Categories</div>
-  <div class="right-subheading">Digital Marketing</div>
-  <div class="right-subheading">Reports</div>
-  <div class="right-subheading">SEO</div>
-  <div class="right-subheading">Strategy</div>
-  <div class="right-heading">Achieves</div>
-  <div class="right-subheading">January</div>
-  <div class="right-heading">Tags</div>
-  <main>
-    <a href="">
-
-  </a>
-    <div>
-      <a href=""></a>
-    </div>
-  </main>
-  <div class="tags">
-    <div class="right-tag">Affiliate (3)</div>
-    <div class="right-tag">Analysis (2)</div>
-    <div class="right-tag">High (2)</div>
-    <div class="right-tag">Performance (2)</div>
-    <div class="right-tag">SEO (2)</div>
-  </div>
 </template>
 
 <script>
-
-import {reactive} from "vue";
-
-const articles = [
-  {
-    coverImg: 'https://images.unsplash.com/photo-1556691421-cf15fe27a0b6?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80',
-    title: 'Hi~',
-    date: '1 Jan 2012'
-  },
-  {
-    coverImg: '/src/assets/img_1.png',
-    title: 'Hi~',
-    date: '1 Jan 2012'
-  },
-  {
-    coverImg: '/src/assets/img_1.png',
-    title: 'Hi~',
-    date: '1 Jan 2012'
-  },
-
-]
-
-const cl = [
-  {
-    category: "nation",
-    number: 25,
-  },
-  {
-    category: "nation",
-    number: 25,
-  },
-  {
-    category: "nation",
-    number: 25,
-  },
-  {
-    category: "nation",
-    number: 25,
-  }
-]
-
-const gl = [
-  {
-    coverImg: '/src/assets/img_1.png',
-  },
-  {
-    coverImg: '/src/assets/img_1.png',
-  },
-  {
-    coverImg: '/src/assets/img_1.png',
-  },
-  {
-    coverImg: '/src/assets/img_1.png',
-  },
-  {
-    coverImg: '/src/assets/img_1.png',
-  },
-  {
-    coverImg: '/src/assets/img_1.png',
-  },
-]
-
+import {onMounted, reactive, watch} from "vue";
+import {Galleries} from "../../models/Galleries/galleries";
+import {Category} from "../../models/Categories/Category";
+import {Articles} from "../../models/articles";
+import * as dayjs from 'dayjs'
+import rt from "dayjs/plugin/relativeTime";
+import SearchIcon from '../../assets/search.svg'
+dayjs.extend(rt)
+import {useRoute, useRouter} from "vue-router";
 
 export default {
-  name: "Leftnav",
+  name: "Rightnav",
+  components: {SearchIcon},
+
+
+
   setup(props) {
-    const recentpostObj = reactive({recentposts: articles})
-    const categorylistObj = reactive({clist: cl})
-    const galleryObj = reactive({gallery:gl})
-    return {recentpostObj, categorylistObj,galleryObj}
+    const router = useRouter()
+    const route = useRoute()
+    const recentpostObj = reactive({recentposts: []})
+    const categorylistObj = reactive({categories: []})
+    const haha = reactive ({d:dayjs})
+    const searchObj = reactive({keyword:''})
+    const galleryObj = reactive({gallery:[]})
+
+    const searchArticle = async()=>{
+      await router.push({path: `/search/${searchObj.keyword}`})
+    }
+
+    const openArticle = async (id) => {
+      await router.push({path: `/${id}`})
+    }
+
+    const openCategory = async(category)=>{
+      await router.push({path:`/categories/${category}`})
+    }
+
+
+
+    onMounted(async () => {
+      galleryObj.gallery = await Galleries.getGallery(1)
+      categorylistObj.categories = await Category.getCategories()
+      recentpostObj.recentposts = await Articles.getRecentPosts()
+
+    })
+
+    return {recentpostObj,
+            categorylistObj,
+            galleryObj,
+            haha,
+            searchObj,
+            searchArticle,
+            openCategory,
+            openArticle
+    }
   }
 
 }
 </script>
 
 
-<style>
+<style scoped>
 
 * {
   font-family: Nunito, sans-serif;
-  font-style: normal;
-  font-weight: normal;
 }
 
-#search {
-  width: 330px;
+/*.left-search-title{*/
+/*  margin:20px 0 0 -820px;*/
+/*  display:flex;*/
+/*  flex-direction: row;*/
+/*  align-items: center;*/
+/*  font-size:30px;*/
+/*  color:#ACC4C9;*/
+/*  !*visibility: hidden;*!*/
+/*}*/
+
+/*.left-searchIcon{*/
+/*  !*display: block;*!*/
+/*  !*text-indent: -9999px;*!*/
+/*  width: 50px;*/
+/*  height: 50px;*/
+/*  background: url(../../assets/search.svg);*/
+/*  background-size:cover;*/
+/*}*/
+
+.search-field:focus .left-search-title{
+  visibility: hidden;
+}
+
+
+.search-field{
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   height: 60px;
   text-align: left;
-  font-size: 30px;
   background: #F7F7F7;
   border: 1px solid #E7E7E7;
   border-radius: 30px;
   padding-left: 50px;
   margin-top: 48px;
-  color: #E7E7E7;
+  color: #d4d4d4;
   outline: none;
+  box-sizing: border-box;
+}
+.search{
+  display: flex;
+  flex-direction: row;
+}
 
+.searchIcon{
+  width: 30px;
+  height: 30px;
+  margin-right: 30px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+
+#search {
+  border:none;
+  font-size:30px;
+  text-align: left;
+  background: transparent;
+  max-width: 80%;
+  color: #a7c2c7;
+}
+
+textarea:focus, input:focus{
+  outline: none;
+  color: #a7c2c7;
 }
 
 .rp-img {
   width: 80px;
   height: 80px;
   background-size: cover;
+  position:absolute;
 }
 
+
 #search:focus {
-  color: rgb(34, 85, 143);
+  color: #a7c2c7;
 }
 
 .right-heading {
@@ -201,38 +215,13 @@ export default {
 }
 
 .right-subheading {
-
   font-size: 16px;
   line-height: 30px;
-  text-transform: capitalize;
   color: #666666;
   cursor: pointer;
 }
 
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  cursor: pointer;
-}
 
-.right-tag {
-  width: fit-content;
-  font-size: 14px;
-  line-height: 30px;
-  text-transform: capitalize;
-  color: #666666;
-  background: #F7F7F7;
-  border: 1px solid #E7E7E7;
-  padding-left: 26px;
-  padding-right: 26px;
-  margin: 5px;
-  border-radius: 30px;
-  border: 1px solid #E7E7E7;
-  border-radius: 30px;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-}
 
 .right-separator {
   height: 1px;
@@ -246,7 +235,7 @@ export default {
 }
 
 .rp-info-container {
-  padding-left: 24px;
+  padding-left: 100px;
   font-size: 16px;
   line-height: 26px;
   color: #666666;
@@ -271,12 +260,12 @@ export default {
   line-height: 30px;
   text-transform: capitalize;
   color: #666666;
+  cursor: pointer;
 }
 
 .number{
   font-size: 13px;
   line-height: 30px;
-  text-transform: capitalize;
   color: #232323;
   background: #F1F1F1;
   border-radius: 5px;
@@ -294,12 +283,15 @@ export default {
   width: 100px;
   height: 100px;
   background-size: cover;
+  cursor: pointer;
 }
 
 .followus{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  cursor: pointer;
+  margin-bottom: 100px;
 }
 .share-btn{
   /*width: 188px;*/

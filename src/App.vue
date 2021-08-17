@@ -38,6 +38,8 @@ html,body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+
 .boundary{
   max-width: 1150px;
   margin-left: auto;
@@ -49,9 +51,11 @@ html,body{
 
 .left{
   flex-grow: 1;
+  overflow-x: hidden;
 }
 .right{
   width: 380px;
+  box-sizing: border-box;
   padding-left: 50px;
 }
 </style>
